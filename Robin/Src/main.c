@@ -64,6 +64,15 @@ UART_HandleTypeDef huart3;
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 #define BOOTLOADER_SIZE 0x7000
+#ifdef MKS_ROBIN_NANO
+#define CPU_NAME "STM32F103VET6"
+#define ACTION_PIN  GPIO_PIN_1
+#define ACTION_PORT GPIOB
+#else
+#define CPU_NAME "STM32F103ZET6"
+#define ACTION_PIN  GPIO_PIN_2
+#define ACTION_PORT GPIOB
+#endif
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -121,7 +130,7 @@ int main(void)
   MX_FATFS_Init();
   /* USER CODE BEGIN 2 */
 
-  printf("\nSTM32F103ZET6\n");
+  printf("\n"CPU_NAME"\n");
 
   FRESULT result;
   DIR Directory;
@@ -170,7 +179,7 @@ int main(void)
 
   /* USER CODE BEGIN 3 */
 	  HAL_Delay(500);
-	  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_2);
+	  HAL_GPIO_TogglePin(ACTION_PORT, ACTION_PIN);
   }
   /* USER CODE END 3 */
 
@@ -278,13 +287,13 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(ACTION_PORT, ACTION_PIN, GPIO_PIN_SET);
 
   /*Configure GPIO pin : PB2 */
-  GPIO_InitStruct.Pin = GPIO_PIN_2;
+  GPIO_InitStruct.Pin = ACTION_PIN;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  HAL_GPIO_Init(ACTION_PORT, &GPIO_InitStruct);
 
 }
 
